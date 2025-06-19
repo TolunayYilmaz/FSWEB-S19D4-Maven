@@ -9,6 +9,7 @@ import com.workintech.s19d1.entity.Gender;
 import com.workintech.s19d1.entity.Movie;
 import com.workintech.s19d1.exceptions.ApiException;
 import com.workintech.s19d1.service.ActorService;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,11 +23,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -111,8 +113,7 @@ class ControllerTest {
     @Test
     @DisplayName("Update Actor")
     void update() throws Exception {
-        given(actorService.findById(actor.getId())).willReturn(actor);
-        given(actorService.save(any(Actor.class))).willReturn(actor);
+        given(actorService.update(eq(actor.getId()), any(Actor.class))).willReturn(actor);
 
         mockMvc.perform(put("/actor/{id}", actor.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -122,19 +123,23 @@ class ControllerTest {
                 .andExpect(jsonPath("$.firstName", is(actor.getFirstName())));
     }
 
+
     @Test
     @DisplayName("Delete Actor")
     void deleteActorTest() throws Exception {
-        given(actorService.findById(actor.getId())).willReturn(actor);
+
+        given(actorService.delete(actor.getId())).willReturn(actor);
+
 
         mockMvc.perform(delete("/actor/{id}", actor.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(actor.getId().intValue())))
-                .andExpect(jsonPath("$.firstName", is(actor.getFirstName()))); // Assuming you have a getName method.
+                .andExpect(jsonPath("$.firstName", is(actor.getFirstName())));
 
-        // Optionally verify that the service method was called
-        // verify(actorService).delete(actor);
+
+        verify(actorService).delete(actor.getId());
     }
+
 
 
     @Test

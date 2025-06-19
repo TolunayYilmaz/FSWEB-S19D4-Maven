@@ -9,11 +9,11 @@ import com.workintech.s19d1.repository.ActorRepository;
 import com.workintech.s19d1.repository.MovieRepository;
 import com.workintech.s19d1.service.ActorServiceImpl;
 import com.workintech.s19d1.service.MovieServiceImpl;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -143,7 +143,7 @@ class MainTest {
         int expectedStatus = 400;
         LocalDateTime expectedDateTime = LocalDateTime.now();
 
-        ExceptionResponse exceptionResponse = new ExceptionResponse(expectedMessage, expectedStatus, expectedDateTime);
+        ExceptionResponse exceptionResponse = new ExceptionResponse( expectedStatus,expectedMessage, expectedDateTime);
 
         // Verify that each property is correctly initialized
         assertEquals(expectedMessage, exceptionResponse.getMessage(), "The message should match the initialized value.");
